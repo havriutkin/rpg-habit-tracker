@@ -1,5 +1,5 @@
 interface Habit {
-    id: number;
+    habit_id: number;
     user_id: number;
     name: string;
     description: string;

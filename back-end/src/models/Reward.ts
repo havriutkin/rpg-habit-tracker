@@ -1,5 +1,5 @@
 interface Reward {
-    id: number;
+    reward_id: number;
     user_id: number;
     name: string;
     description: string;
