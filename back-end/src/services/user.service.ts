@@ -10,6 +10,15 @@ export const getUserById = async (id: number): Promise<User | undefined> => {
     return result[0] as User;
 };
 
+export const getUserByUsername = async (username: string): Promise<User | undefined> => {
+    const result = await query("SELECT * FROM user WHERE username = $1", [username]);
+    if (result.length === 0) {
+        return undefined;
+    }
+
+    return result[0] as User;
+}
+
 export const updateUserPoints = async (id: number, points: number): Promise<User> => {
     const result = await query("UPDATE user SET points = $1 WHERE user_id = $2 RETURNING *", [points, id]);
     if (result.length === 0) {
@@ -19,7 +28,7 @@ export const updateUserPoints = async (id: number, points: number): Promise<User
     return result[0];
 };
 
-export const createUser = async (username: string, password: string) => {
+export const createUser = async (username: string, password: string): Promise<User> => {
     const newUser: Omit<User, "user_id"> = {
         username,
         password,
