@@ -4,8 +4,7 @@ import { Request, Response, NextFunction, response } from "express";
 import * as habitRequests from "../@types/requests/habit.requests"
 
 export const getHabitById = async (req: habitRequests.GetHabitByIdRequest, 
-                                res: Response, 
-                                next: NextFunction) => {
+                                res: Response) => {
     // todo: implement
 }
 

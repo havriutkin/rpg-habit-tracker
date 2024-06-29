@@ -1,7 +1,10 @@
 import { Router } from "express";
 import * as rewardController from "../controllers/reward.controller";
+import authMiddleware from "../middlewares/auth.middleware";
 
 const rewardRouter = Router();
+
+rewardRouter.use(authMiddleware);
 
 rewardRouter.get("/:reward_id", rewardController.getRewardById);
 rewardRouter.get("/user/:user_id", rewardController.getRewardsByUser);

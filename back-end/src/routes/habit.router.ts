@@ -1,7 +1,10 @@
 import { Router } from "express";
 import * as habitController from "../controllers/habit.controller";
+import authMiddleware from "../middlewares/auth.middleware";
 
 const habitRouter = Router();
+
+habitRouter.use(authMiddleware);
 
 habitRouter.get("/:habit_id", habitController.getHabitById);
 habitRouter.get("/user/:user_id", habitController.getHabitsByUserId);
