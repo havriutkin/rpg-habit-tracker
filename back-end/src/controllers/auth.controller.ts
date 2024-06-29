@@ -2,7 +2,7 @@ import { createUser, getUserByUsername } from "../services/user.service";
 import * as authService from "../services/auth.service";
 import query from "../configs/db";
 import { Response, NextFunction } from "express";
-import { RegisterRequest, LoginRequest } from "../types/requests/auth.requests";
+import { RegisterRequest, LoginRequest } from "../@types/requests/auth.requests";
 
 export const register = async (req: RegisterRequest, res: Response, next: NextFunction) => {
     const { username, password } = req.body;

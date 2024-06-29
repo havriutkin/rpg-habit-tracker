@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
+import Principal from '../models/Principal';
 
 const JWT_SECRET = "my_secret" // Todo: use env
 
@@ -15,14 +16,14 @@ export const comparePassword = async (password: string, hash: string): Promise<b
 }
 
 export const issueToken = async (user_id: number): Promise<string> => {
-    const payload = { user_id };
+    const payload: Principal = { user_id };
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "7d"});
     return token;
 }
 
 export const decodeToken = async (token: string) => {
     try {
-        const decoded = jwt.verify(token, JWT_SECRET);
+        const decoded = jwt.verify(token, JWT_SECRET) as Principal;
         return decoded;
     } catch(err: any) {
         throw new Error(); // Todo: implement custom error

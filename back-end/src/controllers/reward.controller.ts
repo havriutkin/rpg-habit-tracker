@@ -1,6 +1,6 @@
 import Reward from "../models/Reward";
 import * as rewardService from "../services/reward.service"
-import * as rewardRequests from "../types/requests/reward.requests"
+import * as rewardRequests from "../@types/requests/reward.requests"
 import { Request, Response, NextFunction } from "express";
 
 

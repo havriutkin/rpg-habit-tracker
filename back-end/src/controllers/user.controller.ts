@@ -1,7 +1,7 @@
 import * as userService from "../services/user.service"
 import User from "../models/User"
 import { Request, Response, NextFunction } from "express"
-import * as userRequests from "../types/requests/user.requests"
+import * as userRequests from "../@types/requests/user.requests"
 
 
 export const getUserById = async (

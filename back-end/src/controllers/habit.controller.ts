@@ -1,7 +1,7 @@
 import Habit from "../models/Habit";
 import * as habitService from "../services/habit.service";
 import { Request, Response, NextFunction, response } from "express";
-import * as habitRequests from "../types/requests/habit.requests"
+import * as habitRequests from "../@types/requests/habit.requests"
 
 export const getHabitById = async (req: habitRequests.GetHabitByIdRequest, 
                                 res: Response, 
