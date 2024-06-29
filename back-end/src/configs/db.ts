@@ -1,5 +1,6 @@
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
+import CustomError from 'errors/CustomError';
 
 dotenv.config();
 
@@ -16,7 +17,7 @@ const query = async (queryText: string, params: any[] = []) => {
         const { rows } = await pool.query(queryText, params);
         return rows;
     } catch (error: any) {
-        throw new Error(error.message);
+        throw new CustomError(500, "Database Error", `Error when querying database: ${error.message}`);
     }
 };
 

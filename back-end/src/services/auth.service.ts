@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
 import Principal from '../models/Principal';
+import CustomError from 'errors/CustomError';
 
 const JWT_SECRET = "my_secret" // Todo: use env
 
@@ -26,6 +27,6 @@ export const decodeToken = async (token: string) => {
         const decoded = jwt.verify(token, JWT_SECRET) as Principal;
         return decoded;
     } catch(err: any) {
-        throw new Error(); // Todo: implement custom error
+        throw new CustomError(403, "Token is invalid.", "Unable to decode token.");
     }
 }

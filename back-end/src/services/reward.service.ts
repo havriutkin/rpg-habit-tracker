@@ -1,6 +1,7 @@
 import Reward from "../models/Reward";
 import query from "../configs/db";
 import User from "../models/User";
+import CustomError from "errors/CustomError";
 
 export const getRewardById = async (id: number): Promise<Reward | undefined> => {
     const result = await query("SELECT * FROM reward WHERE reward_id = $1", [id]);
@@ -39,7 +40,7 @@ export const createReward = async (user_id: number, name: string, description: s
 
     const result = await query("INSERT INTO reward (user_id, name, description, price, is_purchased) VALUES ($1, $2, $3, $4, $5) RETURNING *", [newReward.user_id, newReward.name, newReward.description, newReward.price, newReward.is_purchased]);
     if (result.length === 0) {
-        throw new Error("Reward not created");
+        throw new CustomError(500, "Error. Reward were not created.", "Reward Service: Unable to create reward.")
     }
 
     return result[0];
@@ -48,7 +49,7 @@ export const createReward = async (user_id: number, name: string, description: s
 export const updateReward = async (reward_id: number, name: string, description: string): Promise<Reward> => {
     const result = await query("UPDATE reward SET name = $1, description = $2 WHERE reward_id = $3 RETURNING *", [name, description, reward_id]);
     if (result.length === 0) {
-        throw new Error("Reward not found");
+        throw new CustomError(404, "Error. Reward were not found.", "Reward Service: Unable to update reward: reward not found.");
     }
 
     return result[0];
@@ -58,16 +59,16 @@ export const purchaseReward = async (user_id: number, reward_id: number): Promis
     // Check if user has enough points to purchase reward
     const reward = await getRewardById(reward_id);
     if (!reward) {
-        throw new Error("Reward not found");
+        throw new CustomError(404, "Error. Reward were not found.", "Reward Service: Unable to purchase reward: reward not found.");
     }
 
     const user = await query("SELECT * FROM users WHERE user_id = $1", [user_id]) as User[];
     if (user.length === 0) {
-        throw new Error("User not found");
+        throw new CustomError(404, "Error. User were not found.", "Reward Service: Unable to purchase reward: user not found.");
     }
 
     if (user[0].points < reward.price) {
-        throw new Error("Not enough points to purchase reward");
+        throw new CustomError(403, "Error. Not enough points.", "Reward Service: Unable to purchase reward: not enough points");
     }
 
     // Use purchase_reward(user_id INTEGER, reward_id INTEGER) function in psql
