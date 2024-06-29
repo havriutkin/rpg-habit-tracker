@@ -10,3 +10,5 @@ class CustomError extends Error {
         this.loggerMessage = loggerMessage;
     }
 }
+
+export default CustomError;
