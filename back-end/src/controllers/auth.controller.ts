@@ -3,6 +3,7 @@ import * as authService from "../services/auth.service";
 import query from "../configs/db";
 import { Response, NextFunction } from "express";
 import { RegisterRequest, LoginRequest } from "../@types/requests/auth.requests";
+import CustomError from "errors/CustomError";
 
 export const register = async (req: RegisterRequest, res: Response, next: NextFunction) => {
     const { username, password } = req.body;
@@ -11,8 +12,11 @@ export const register = async (req: RegisterRequest, res: Response, next: NextFu
     const user = await getUserByUsername(username);
 
     if (user) {
-        // todo: create custom error
-        next(new Error);
+        return next(new CustomError(
+            401,
+            "User with give username already exists.",
+            `Auth Controller: unable to register: user ${username} already exists.`
+        ));
     }
 
     // Hash password
@@ -28,8 +32,7 @@ export const register = async (req: RegisterRequest, res: Response, next: NextFu
             token: token
         });
     } catch(err: any) {
-        // Todo: custom errors
-        return next(new Error);
+        return next(err);
     }
 
 };
@@ -41,16 +44,22 @@ export const login = async (req: LoginRequest, res: Response, next: NextFunction
     const user = await getUserByUsername(username);
 
     if (!user) {
-        // Todo: custom error
-        return next(new Error());
+        return next(new CustomError(
+            401,
+            "User with give username doesn't exist.",
+            `Auth Controller: unable to login: user ${username} doesn't exist.`
+        ));
     }
 
     // Compare passwords
     const isMatch = authService.comparePassword(password, user.password);
 
     if (!isMatch) {
-        // todo: custom error
-        return next(new Error());
+        return next(new CustomError(
+            403,
+            "Wrong Credentials.",
+            `Auth Controller: unable to login: wrong credentials.`
+        ));
     }
 
     // Issue token
@@ -61,7 +70,6 @@ export const login = async (req: LoginRequest, res: Response, next: NextFunction
             token: token
         });
     } catch (err: any) {
-        // todo: custom error
-        return next(new Error());
+        return next(err);
     }
 };
