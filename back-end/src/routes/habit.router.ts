@@ -7,9 +7,9 @@ const habitRouter = Router();
 habitRouter.use(authMiddleware);
 
 habitRouter.get("/:habit_id", habitController.getHabitById);
-habitRouter.get("/user/:user_id", habitController.getHabitsByUserId);
-habitRouter.post("/", habitController.createHabit);
+habitRouter.get("/", habitController.getHabits);
 habitRouter.post("/complete/:habit_id", habitController.completeHabit);
+habitRouter.post("/", habitController.createHabit);
 habitRouter.put("/:habit_id", habitController.updateHabit);
 habitRouter.delete("/:habit_id", habitController.deleteHabit);
 

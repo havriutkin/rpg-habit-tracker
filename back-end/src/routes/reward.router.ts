@@ -7,9 +7,9 @@ const rewardRouter = Router();
 rewardRouter.use(authMiddleware);
 
 rewardRouter.get("/:reward_id", rewardController.getRewardById);
-rewardRouter.get("/user/:user_id", rewardController.getRewardsByUser);
-rewardRouter.get("/purchased/:user_id", rewardController.getPurchasedRewardsByUser);
-rewardRouter.get("/available/:user_id", rewardController.getAvailableRewardsByUser);
+rewardRouter.get("/user", rewardController.getRewardsByUser);
+rewardRouter.get("/purchased", rewardController.getPurchasedRewards);
+rewardRouter.get("/available", rewardController.getAvailableRewards);
 rewardRouter.post("/", rewardController.createReward);
 rewardRouter.put("/", rewardController.updateReward);
 rewardRouter.delete("/:reward_id", rewardController.deleteReward);

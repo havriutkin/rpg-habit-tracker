@@ -13,9 +13,19 @@ export const getRewardById = async (req: rewardRequests.GetRewardByIdRequest,
             res.status(404).send("Reward not found");
             return;
         }
-        res.status(200).json(reward);
+
+        if (reward.user_id !== req.principal.user_id) {
+            return next(new Error());   // todo: custom error 403
+        }
+
+        res.status(200).json({
+            name: reward.name,
+            description: reward.description,
+            price: reward.price,
+            is_purchased: reward.is_purchased
+        });
     } catch (error) {
-        next(error);
+        next(error); // todo: custom error
     }
 };
 
@@ -23,30 +33,55 @@ export const getRewardsByUser = async (req: rewardRequests.GetRewardsByUserReque
                                     res: Response,
                                     next: NextFunction) => {
     try {
-        const rewards: Reward[] = await rewardService.getRewardsByUserId(req.params.user_id);
-        res.status(200).json(rewards);
+        const rewards: Reward[] = await rewardService.getRewardsByUserId(req.principal.user_id);
+        const formattedRewards = rewards.map(reward => {
+            return {
+                name: reward.name,
+                description: reward.description,
+                price: reward.price,
+                is_purchased: reward.is_purchased
+            }
+        });
+
+        res.status(200).json(formattedRewards);
     } catch (error) {
         next(error);
     }
 };
 
-export const getPurchasedRewardsByUser = async (req: rewardRequests.GetRewardsByUserRequest,
+export const getPurchasedRewards = async (req: rewardRequests.GetRewardsByUserRequest,
                                     res: Response,
                                     next: NextFunction) => {
     try {
-        const rewards: Reward[] = await rewardService.getPurchasedRewardsByUserId(req.params.user_id);
-        res.status(200).json(rewards);
+        const rewards: Reward[] = await rewardService.getPurchasedRewardsByUserId(req.principal.user_id);
+        const formattedRewards = rewards.map(reward => {
+            return {
+                name: reward.name,
+                description: reward.description,
+                price: reward.price,
+                is_purchased: reward.is_purchased
+            }
+        });
+        res.status(200).json(formattedRewards);
     } catch (error) {
         next(error);
     }
 };
 
-export const getAvailableRewardsByUser = async (req: rewardRequests.GetRewardsByUserRequest,
+export const getAvailableRewards = async (req: rewardRequests.GetRewardsByUserRequest,
                                     res: Response,
                                     next: NextFunction) => {
     try {
-        const rewards: Reward[] = await rewardService.getAvailableRewardsByUserId(req.params.user_id);
-        res.status(200).json(rewards);
+        const rewards: Reward[] = await rewardService.getAvailableRewardsByUserId(req.principal.user_id);
+        const formattedRewards = rewards.map(reward => {
+            return {
+                name: reward.name,
+                description: reward.description,
+                price: reward.price,
+                is_purchased: reward.is_purchased
+            }
+        });
+        res.status(200).json(formattedRewards);
     } catch (error) {
         next(error);
     }
@@ -55,18 +90,73 @@ export const getAvailableRewardsByUser = async (req: rewardRequests.GetRewardsBy
 export const createReward = async (req: rewardRequests.CreateRewardRequest,
                                 res: Response,
                                 next: NextFunction) => {
-    // todo: implement
+    try {
+        const { name, description, price } = req.body;
+        const reward = await rewardService.createReward(req.principal.user_id, name, description, price);
+        res.status(201).json({
+            name: reward.name,
+            description: reward.description,
+            price: reward.price,
+            is_purchased: reward.is_purchased
+        })
+    } catch (error) {
+        next(error); // todo: custom error
+    }
 };
 
 export const updateReward = async (req: rewardRequests.UpdateRewardRequest,
                                 res: Response,
                                 next: NextFunction) => {
+    try {
+        const { reward_id, name, description } = req.body;
 
-    // todo: implement
+        // Get reward
+        const reward = await rewardService.getRewardById(reward_id);
+
+        if (!reward) {
+            return next(new Error()); // todo: custom error
+        }
+
+        if (reward.user_id !== req.principal.user_id) {
+            return next(new Error()); // todo: custom error
+        }
+
+        const updatedReward = await rewardService.updateReward(reward_id, name || reward.name, description || reward.description);
+
+        res.status(200).json({
+            name: updatedReward.name,
+            description: updatedReward.description,
+            price: updatedReward.price,
+            is_purchased: updatedReward.is_purchased
+        })
+    } catch (error) {
+        next(error); // todo: custom error
+    }
 };
 
 export const deleteReward = async (req: rewardRequests.DeleteRewardRequest,
                                 res: Response,
                                 next: NextFunction) => {
-    // todo: implement
+    try {
+        const { reward_id } = req.params;
+
+        // Get reward
+        const reward = await rewardService.getRewardById(reward_id);
+
+        if (!reward) {
+            return next(new Error()); // todo: custom error
+        }
+
+        if (reward.user_id !== req.principal.user_id) {
+            return next(new Error()); // todo: custom error
+        }
+
+        await rewardService.deleteReward(reward_id);
+
+        res.status(200).json({
+            message: "Reward was deleted."
+        });
+    } catch (error) {
+        next(error); // todo: custom error
+    }
 };

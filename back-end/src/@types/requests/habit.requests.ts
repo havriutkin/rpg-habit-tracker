@@ -5,10 +5,6 @@ interface GetHabitByIdParams {
     habit_id: number;
 }
 
-interface GetHabitsByUserParams {
-    user_id: number;
-}
-
 interface CreateHabitBody {
     user_id: number;
     name: string;
@@ -22,9 +18,9 @@ interface CompleteHabitParams {
 
 interface UpdateHabitBody {
     habit_id: number;
-    name: string;
-    description: string;
-    points: number;
+    name: string | undefined;
+    description: string | undefined;
+    points: number | undefined;
 }
 
 interface DeleteHabitParams {
@@ -32,7 +28,7 @@ interface DeleteHabitParams {
 }
 
 export type GetHabitByIdRequest = Request<GetHabitByIdParams>;
-export type GetHabitsByUserRequest = Request<GetHabitsByUserParams>;
+export type GetHabitsByUserRequest = Request;
 export type CreateHabitRequest = Request<{}, any, CreateHabitBody>;
 export type CompleteHabitRequest = Request<CompleteHabitParams>;
 export type UpdateHabitRequest = Request<{}, any, UpdateHabitBody>;

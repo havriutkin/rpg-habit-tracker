@@ -4,10 +4,6 @@ interface GetRewardByIdParams {
     reward_id: number;
 };
 
-interface GetRewardsByUserParams {
-    user_id: number;
-};
-
 interface CreateRewardBody {
     name: string;
     description: string;
@@ -16,8 +12,8 @@ interface CreateRewardBody {
 
 interface UpdateRewardBody {
     reward_id: number;
-    name: string;
-    description: string;
+    name: string | undefined;
+    description: string | undefined;
 };
 
 interface DeleteRewardParams {
@@ -25,7 +21,7 @@ interface DeleteRewardParams {
 };
 
 export type GetRewardByIdRequest = Request<GetRewardByIdParams, any, {}, {}>
-export type GetRewardsByUserRequest = Request<GetRewardsByUserParams, any, {}, {}>
+export type GetRewardsByUserRequest = Request
 export type CreateRewardRequest = Request<{}, any, CreateRewardBody, {}>;
 export type UpdateRewardRequest = Request<{}, any, UpdateRewardBody, {}>;
 export type DeleteRewardRequest = Request<DeleteRewardParams, any, {}, {}>;
