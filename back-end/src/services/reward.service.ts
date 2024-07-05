@@ -1,7 +1,7 @@
 import Reward from "../models/Reward";
 import query from "../configs/db";
 import User from "../models/User";
-import CustomError from "errors/CustomError";
+import CustomError from "../errors/CustomError";
 
 export const getRewardById = async (id: number): Promise<Reward | undefined> => {
     const result = await query("SELECT * FROM reward WHERE reward_id = $1", [id]);

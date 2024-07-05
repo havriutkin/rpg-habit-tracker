@@ -1,6 +1,6 @@
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
-import CustomError from 'errors/CustomError';
+import CustomError from '../errors/CustomError';
 
 dotenv.config();
 

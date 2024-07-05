@@ -1,7 +1,7 @@
 import * as userService from "../services/user.service"
 import User from "../models/User"
 import { Request, Response, NextFunction } from "express"
-import CustomError from "errors/CustomError";
+import CustomError from "../errors/CustomError";
 
 export const getUserById = async (
                                 req: Request, 

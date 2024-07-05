@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
 import Principal from '../models/Principal';
-import CustomError from 'errors/CustomError';
+import CustomError from '../errors/CustomError';
 
 const JWT_SECRET = "my_secret" // Todo: use env
 

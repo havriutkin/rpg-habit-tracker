@@ -1,6 +1,6 @@
 import Habit from "../models/Habit";
 import query from "../configs/db";
-import CustomError from "errors/CustomError";
+import CustomError from "../errors/CustomError";
 
 export const getHabitById = async (id: number): Promise<Habit | undefined> => {
     const result = await query("SELECT * FROM habit WHERE habit_id = $1", [id]);

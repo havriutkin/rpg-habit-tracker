@@ -1,13 +1,11 @@
 import Reward from "../models/Reward";
 import * as rewardService from "../services/reward.service"
-import * as rewardRequests from "../@types/requests/reward.requests"
-import { Request, Response, NextFunction } from "express";
-import CustomError from "errors/CustomError";
+import * as rewardRequests from "../types/requests/reward.requests"
+import { RequestHandler } from "express";
+import CustomError from "../errors/CustomError";
 
 
-export const getRewardById = async (req: rewardRequests.GetRewardByIdRequest,
-                                res: Response,
-                                next: NextFunction) => {
+export const getRewardById: RequestHandler<rewardRequests.GetRewardByIdParams> = async (req, res, next) => {
     try {
         const reward: Reward | undefined = await rewardService.getRewardById(req.params.reward_id);
         if (!reward) {
@@ -37,9 +35,7 @@ export const getRewardById = async (req: rewardRequests.GetRewardByIdRequest,
     }
 };
 
-export const getRewardsByUser = async (req: rewardRequests.GetRewardsByUserRequest,
-                                    res: Response,
-                                    next: NextFunction) => {
+export const getRewardsByUser: RequestHandler = async (req, res, next) => {
     try {
         const rewards: Reward[] = await rewardService.getRewardsByUserId(req.principal.user_id);
         const formattedRewards = rewards.map(reward => {
@@ -57,9 +53,7 @@ export const getRewardsByUser = async (req: rewardRequests.GetRewardsByUserReque
     }
 };
 
-export const getPurchasedRewards = async (req: rewardRequests.GetRewardsByUserRequest,
-                                    res: Response,
-                                    next: NextFunction) => {
+export const getPurchasedRewards: RequestHandler = async (req, res, next) => {
     try {
         const rewards: Reward[] = await rewardService.getPurchasedRewardsByUserId(req.principal.user_id);
         const formattedRewards = rewards.map(reward => {
@@ -76,9 +70,7 @@ export const getPurchasedRewards = async (req: rewardRequests.GetRewardsByUserRe
     }
 };
 
-export const getAvailableRewards = async (req: rewardRequests.GetRewardsByUserRequest,
-                                    res: Response,
-                                    next: NextFunction) => {
+export const getAvailableRewards: RequestHandler = async (req, res, next) => {
     try {
         const rewards: Reward[] = await rewardService.getAvailableRewardsByUserId(req.principal.user_id);
         const formattedRewards = rewards.map(reward => {
@@ -95,9 +87,7 @@ export const getAvailableRewards = async (req: rewardRequests.GetRewardsByUserRe
     }
 };
 
-export const createReward = async (req: rewardRequests.CreateRewardRequest,
-                                res: Response,
-                                next: NextFunction) => {
+export const createReward: RequestHandler<{}, any, rewardRequests.CreateRewardBody> = async (req, res, next) => {
     try {
         const { name, description, price } = req.body;
         const reward = await rewardService.createReward(req.principal.user_id, name, description, price);
@@ -112,9 +102,7 @@ export const createReward = async (req: rewardRequests.CreateRewardRequest,
     }
 };
 
-export const updateReward = async (req: rewardRequests.UpdateRewardRequest,
-                                res: Response,
-                                next: NextFunction) => {
+export const updateReward: RequestHandler<{}, any, rewardRequests.UpdateRewardBody> = async (req, res, next) => {
     try {
         const { reward_id, name, description } = req.body;
 
@@ -150,9 +138,7 @@ export const updateReward = async (req: rewardRequests.UpdateRewardRequest,
     }
 };
 
-export const deleteReward = async (req: rewardRequests.DeleteRewardRequest,
-                                res: Response,
-                                next: NextFunction) => {
+export const deleteReward: RequestHandler<rewardRequests.DeleteRewardParams, any, {}> = async (req, res, next) => {
     try {
         const { reward_id } = req.params;
 

@@ -1,4 +1,4 @@
-import CustomError from "errors/CustomError";
+import CustomError from "../errors/CustomError";
 import query from "../configs/db";
 import User from "../models/User";
 

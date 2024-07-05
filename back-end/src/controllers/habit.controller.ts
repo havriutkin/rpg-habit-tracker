@@ -1,11 +1,10 @@
 import Habit from "../models/Habit";
 import * as habitService from "../services/habit.service";
-import { Request, Response, NextFunction, response } from "express";
-import * as habitRequests from "../@types/requests/habit.requests";
-import CustomError from "errors/CustomError";
+import { Request, Response, NextFunction, response, RequestHandler } from "express";
+import * as habitRequests from "../types/requests/habit.requests";
+import CustomError from "../errors/CustomError";
 
-export const getHabitById = async (req: habitRequests.GetHabitByIdRequest, 
-                                res: Response, next: NextFunction) => {
+export const getHabitById: RequestHandler<habitRequests.GetHabitByIdParams> = async (req, res, next) => {
     try {
         const habit = await habitService.getHabitById(req.params.habit_id);
         
@@ -36,9 +35,7 @@ export const getHabitById = async (req: habitRequests.GetHabitByIdRequest,
     }
 }
 
-export const getHabits = async (req: habitRequests.GetHabitsByUserRequest, 
-                                res: Response, 
-                                next: NextFunction) => {
+export const getHabits: RequestHandler = async (req, res, next) => {
     try {
         const habits = await habitService.getHabitsByUserId(req.principal.user_id);
         const formattedHabits = habits.map(habit => {
@@ -54,9 +51,7 @@ export const getHabits = async (req: habitRequests.GetHabitsByUserRequest,
     }
 }
 
-export const createHabit = async (req: habitRequests.CreateHabitRequest,
-                                res: Response,
-                                next: NextFunction) => {
+export const createHabit: RequestHandler<{}, any, habitRequests.CreateHabitBody> = async (req, res, next) =>{
     try {
         const { name, description, points } = req.body;
         const habit = await habitService.createHabit(req.principal.user_id, name, description, points);
@@ -71,9 +66,7 @@ export const createHabit = async (req: habitRequests.CreateHabitRequest,
     }
 }
 
-export const completeHabit = async (req: habitRequests.CompleteHabitRequest,
-                                res: Response,
-                                next: NextFunction) => {
+export const completeHabit: RequestHandler<habitRequests.CompleteHabitParams> = async (req, res, next) => {
     try {
         const habit = await habitService.getHabitById(req.params.habit_id);
         
@@ -106,9 +99,7 @@ export const completeHabit = async (req: habitRequests.CompleteHabitRequest,
     }
 }
 
-export const updateHabit = async (req: habitRequests.UpdateHabitRequest,
-                                res: Response,
-                                next: NextFunction) => {
+export const updateHabit: RequestHandler<{}, any, habitRequests.UpdateHabitBody> = async (req, res, next) => {
     try {
         const { habit_id, name, description, points } = req.body; 
         const habit = await habitService.getHabitById(habit_id);
@@ -145,9 +136,7 @@ export const updateHabit = async (req: habitRequests.UpdateHabitRequest,
     }
 }
 
-export const deleteHabit = async (req: habitRequests.DeleteHabitRequest,
-                                res: Response,
-                                next: NextFunction) => {
+export const deleteHabit: RequestHandler<habitRequests.DeleteHabitParams> = async (req, res, next) => {
     try {
         const { habit_id } = req.params;
 
@@ -176,6 +165,6 @@ export const deleteHabit = async (req: habitRequests.DeleteHabitRequest,
             message: "Habit was deleted."
         });
     } catch (error) {
-        next(error); // todo: custom error
+        next(error);
     }
 }

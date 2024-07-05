@@ -1,11 +1,11 @@
 import { createUser, getUserByUsername } from "../services/user.service";
 import * as authService from "../services/auth.service";
 import query from "../configs/db";
-import { Response, NextFunction } from "express";
-import { RegisterRequest, LoginRequest } from "../@types/requests/auth.requests";
-import CustomError from "errors/CustomError";
+import { Response, NextFunction, RequestHandler } from "express";
+import * as authRequests from "../types/requests/auth.requests";
+import CustomError from "../errors/CustomError";
 
-export const register = async (req: RegisterRequest, res: Response, next: NextFunction) => {
+export const register: RequestHandler<{}, any, authRequests.AuthRequestBody> = async (req, res, next) => {
     const { username, password } = req.body;
 
     // Check if username already exists
@@ -37,7 +37,7 @@ export const register = async (req: RegisterRequest, res: Response, next: NextFu
 
 };
 
-export const login = async (req: LoginRequest, res: Response, next: NextFunction) => {
+export const login: RequestHandler<{}, any, authRequests.AuthRequestBody> = async (req, res, next) => {
     const { username, password } = req.body;
 
     // Check if user exits
