@@ -4,7 +4,7 @@ interface Habit {
     name: string;
     description: string;
     points: number;
-    last_completed?: Date;
+    last_completed: Date | null;
 }
 
 export default Habit;

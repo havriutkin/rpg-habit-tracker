@@ -56,6 +56,7 @@ export const createHabit: RequestHandler<{}, any, habitRequests.CreateHabitBody>
         const { name, description, points } = req.body;
         const habit = await habitService.createHabit(req.principal.user_id, name, description, points);
         res.status(201).json({
+            habit_id: habit.habit_id,
             name: habit.name,
             description: habit.description,
             points: habit.points,
@@ -85,7 +86,6 @@ export const completeHabit: RequestHandler<habitRequests.CompleteHabitParams> = 
                 `Habit Controller: unable to complete habit: user ${req.principal.user_id} doesn't have access to reward ${req.params.habit_id}`
             ));
         }
-
         const completedHabit = await habitService.completeHabit(req.principal.user_id, habit.habit_id);
 
         res.status(200).json({

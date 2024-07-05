@@ -8,6 +8,11 @@ import errorMiddleware from './middlewares/error.middleware';
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.use(express.json());
+// todo: logger middleware
+// todo: helmet
+// todo: cors
+
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello, TypeScript with Express!');
 });

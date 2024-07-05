@@ -3,7 +3,7 @@ interface Reward {
     user_id: number;
     name: string;
     description: string;
-    price: number;
+    points: number;
     is_purchased: boolean;
 }
 

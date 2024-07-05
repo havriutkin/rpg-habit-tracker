@@ -29,16 +29,16 @@ export const getAvailableRewardsByUserId = async (user_id: number): Promise<Rewa
     return result as Reward[];
 };
 
-export const createReward = async (user_id: number, name: string, description: string, price: number): Promise<Reward> => {
+export const createReward = async (user_id: number, name: string, description: string, points: number): Promise<Reward> => {
     const newReward: Omit<Reward, "reward_id"> = {
         user_id,
         name,
         description,
-        price,
+        points,
         is_purchased: false
     }
 
-    const result = await query("INSERT INTO reward (user_id, name, description, price, is_purchased) VALUES ($1, $2, $3, $4, $5) RETURNING *", [newReward.user_id, newReward.name, newReward.description, newReward.price, newReward.is_purchased]);
+    const result = await query("INSERT INTO reward (user_id, name, description, points, is_purchased) VALUES ($1, $2, $3, $4, $5) RETURNING *", [newReward.user_id, newReward.name, newReward.description, newReward.points, newReward.is_purchased]);
     if (result.length === 0) {
         throw new CustomError(500, "Error. Reward were not created.", "Reward Service: Unable to create reward.")
     }
@@ -67,7 +67,7 @@ export const purchaseReward = async (user_id: number, reward_id: number): Promis
         throw new CustomError(404, "Error. User were not found.", "Reward Service: Unable to purchase reward: user not found.");
     }
 
-    if (user[0].points < reward.price) {
+    if (user[0].points < reward.points) {
         throw new CustomError(403, "Error. Not enough points.", "Reward Service: Unable to purchase reward: not enough points");
     }
 

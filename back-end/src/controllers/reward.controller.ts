@@ -27,7 +27,7 @@ export const getRewardById: RequestHandler<rewardRequests.GetRewardByIdParams> =
         res.status(200).json({
             name: reward.name,
             description: reward.description,
-            price: reward.price,
+            price: reward.points,
             is_purchased: reward.is_purchased
         });
     } catch (error) {
@@ -42,7 +42,7 @@ export const getRewardsByUser: RequestHandler = async (req, res, next) => {
             return {
                 name: reward.name,
                 description: reward.description,
-                price: reward.price,
+                price: reward.points,
                 is_purchased: reward.is_purchased
             }
         });
@@ -60,7 +60,7 @@ export const getPurchasedRewards: RequestHandler = async (req, res, next) => {
             return {
                 name: reward.name,
                 description: reward.description,
-                price: reward.price,
+                price: reward.points,
                 is_purchased: reward.is_purchased
             }
         });
@@ -77,7 +77,7 @@ export const getAvailableRewards: RequestHandler = async (req, res, next) => {
             return {
                 name: reward.name,
                 description: reward.description,
-                price: reward.price,
+                price: reward.points,
                 is_purchased: reward.is_purchased
             }
         });
@@ -89,12 +89,12 @@ export const getAvailableRewards: RequestHandler = async (req, res, next) => {
 
 export const createReward: RequestHandler<{}, any, rewardRequests.CreateRewardBody> = async (req, res, next) => {
     try {
-        const { name, description, price } = req.body;
-        const reward = await rewardService.createReward(req.principal.user_id, name, description, price);
+        const { name, description, points } = req.body;
+        const reward = await rewardService.createReward(req.principal.user_id, name, description, points);
         res.status(201).json({
             name: reward.name,
             description: reward.description,
-            price: reward.price,
+            price: reward.points,
             is_purchased: reward.is_purchased
         })
     } catch (error) {
@@ -130,13 +130,15 @@ export const updateReward: RequestHandler<{}, any, rewardRequests.UpdateRewardBo
         res.status(200).json({
             name: updatedReward.name,
             description: updatedReward.description,
-            price: updatedReward.price,
+            price: updatedReward.points,
             is_purchased: updatedReward.is_purchased
         })
     } catch (error) {
         next(error); // todo: custom error
     }
 };
+
+// todo: purchase reward
 
 export const deleteReward: RequestHandler<rewardRequests.DeleteRewardParams, any, {}> = async (req, res, next) => {
     try {

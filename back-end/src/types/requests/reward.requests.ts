@@ -7,7 +7,7 @@ export interface GetRewardByIdParams {
 export interface CreateRewardBody {
     name: string;
     description: string;
-    price: number;
+    points: number;
 }
 
 export interface UpdateRewardBody {

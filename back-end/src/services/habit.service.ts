@@ -22,7 +22,7 @@ export const createHabit = async (user_id: number, name: string, description: st
         name,
         description,
         points,
-        last_completed: new Date()
+        last_completed: null
     }
 
     const result = await query("INSERT INTO habit (user_id, name, description, points, last_completed) VALUES ($1, $2, $3, $4, $5) RETURNING *", [newHabit.user_id, newHabit.name, newHabit.description, newHabit.points, newHabit.last_completed]);
@@ -34,7 +34,7 @@ export const createHabit = async (user_id: number, name: string, description: st
 };
 
 export const completeHabit = async (user_id: number, habit_id: number): Promise<Habit> => {
-    // Check if habit wan not completed today
+    // Check if habit was not completed today
     const habit = await getHabitById(habit_id);
     if (!habit) {
         throw new CustomError(404, "Error. Habit were not found.", "Habit Service: Unable to complete habit: habit doesn't exist.")
