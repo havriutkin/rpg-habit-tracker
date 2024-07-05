@@ -12,6 +12,7 @@ app.use(express.json());
 // todo: logger middleware
 // todo: helmet
 // todo: cors
+// todo: purchase reward controller
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello, TypeScript with Express!');
